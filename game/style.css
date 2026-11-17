@@ -625,3 +625,197 @@ button:focus-visible, [tabindex]:focus-visible {
     opacity: 0;
   }
 }
+
+/* Stormwatch uses its own bolder, poster-like navigation and game board. */
+.dispatch-launch {
+  display: grid;
+  gap: 5px;
+  width: 100%;
+  margin: 18px 0 17px;
+  padding: 14px 17px;
+  text-align: left;
+  background: #e5b66e;
+  border: 1px solid #ffe3a9;
+  color: #18333b;
+}
+.dispatch-launch:hover { background: #f0cb8b; }
+.dispatch-launch span, .campaign-caption {
+  font: bold 10px Arial, sans-serif;
+  letter-spacing: .15em;
+}
+.dispatch-launch strong { font: normal 23px Georgia, serif; }
+.dispatch-launch small { font: 12px Arial, sans-serif; }
+.campaign-caption { color: #d6caa8; }
+.chart-list { margin-top: 7px; }
+.chart-choice { padding: 9px 2px; }
+.dispatch-shell {
+  min-height: 100dvh;
+  max-width: 1500px;
+  margin: auto;
+  padding: 20px 28px 16px;
+  display: flex;
+  flex-direction: column;
+  background: #102b38;
+}
+.dispatch-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 12px;
+}
+.dispatch-header h1 {
+  font: normal 32px/.95 Georgia, serif;
+  letter-spacing: -.035em;
+  margin: 7px 0 0;
+}
+.dispatch-header h1 em { color: #b4d8c2; font-weight: normal; }
+.dispatch-kicker {
+  color: #e9c184;
+  font: bold 10px Arial, sans-serif;
+  letter-spacing: .17em;
+}
+.dispatch-quiet {
+  background: none;
+  border: 1px solid #98b9aa;
+  color: #e7e5cd;
+  padding: 10px 15px;
+  font: bold 11px Arial, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.dispatch-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 270px;
+  gap: 14px;
+  flex: 1;
+  min-height: 0;
+}
+.dispatch-board {
+  border: 1px solid #9ab5a7;
+  background: #183b4a;
+  overflow: hidden;
+}
+.dispatch-map { display: block; width: 100%; height: 100%; }
+.dispatch-route {
+  stroke: #e1e8cd;
+  stroke-width: 3;
+  stroke-dasharray: 10 9;
+  opacity: .75;
+}
+.storm-route { stroke: #ffad83; stroke-width: 5; opacity: 1; }
+.dispatch-track {
+  stroke: #edbd75;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 2 9;
+  pointer-events: none;
+}
+.dispatch-node { cursor: pointer; }
+.dispatch-hit { fill: transparent; }
+.dock-ring { fill: #1b3e49; stroke: #e8dcc0; stroke-width: 3; }
+.dispatch-node.ready .dock-ring { stroke: #a2f0cb; stroke-width: 4; }
+.dispatch-node:hover .dock-ring, .dispatch-node:focus .dock-ring { stroke: #fff2bc; stroke-width: 5; }
+.port-name { fill: #fff1d0; font: bold 12px Arial, sans-serif; letter-spacing: .6px; }
+.port-detail { fill: #f6c18e; font: bold 10px Arial, sans-serif; letter-spacing: .5px; }
+.dispatch-ship { pointer-events: none; }
+.dispatch-wake {
+  stroke: #c4f1d8;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-dasharray: 3 12;
+  pointer-events: none;
+  animation: wake 2s ease-out forwards;
+}
+.boarding { animation: board-people 1.4s .75s ease-out both; }
+@keyframes board-people {
+  from { opacity: 0; transform: translateY(18px); }
+  35% { opacity: 1; }
+  to { opacity: 0; transform: translateY(-17px); }
+}
+.dispatch-side {
+  padding: 17px;
+  border: 1px solid #7e9c91;
+  background: #153743;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.dispatch-heading h2 { margin: 5px 0; font: normal 27px Georgia, serif; }
+.dispatch-heading p { margin: 0; color: #c1d5c5; font: 13px Arial, sans-serif; }
+.dispatch-forecast { padding: 12px; border-left: 3px solid #ee9e72; background: #294957; }
+.dispatch-forecast strong { display: block; margin-top: 7px; color: #ffe0b5; font: 14px/1.35 Arial, sans-serif; }
+.dispatch-meter { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; border-bottom: 1px solid #709286; padding-bottom: 12px; }
+.dispatch-meter span, .debrief-stats span { display: block; color: #bfd3c2; font: bold 10px Arial, sans-serif; letter-spacing: .1em; }
+.dispatch-meter strong { display: block; margin-top: 5px; font: normal 27px Georgia, serif; }
+.dispatch-meter small { font: 13px Arial, sans-serif; color: #bdd0bf; }
+.dispatch-brief { min-height: 52px; margin: 0; color: #f3d09a; font: 15px/1.35 Georgia, serif; }
+.dispatch-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+.dispatch-actions button, .dispatch-outline {
+  padding: 10px 4px;
+  color: #f5e9cb;
+  border: 1px solid #9bb9a7;
+  background: transparent;
+  font: bold 10px Arial, sans-serif;
+  text-transform: uppercase;
+}
+.dispatch-actions button:hover, .dispatch-outline:hover { background: #ffffff18; }
+.dispatch-help { margin: 0; color: #c0d4c4; font: 12px/1.45 Arial, sans-serif; }
+.dispatch-mobile-docks { display: none; }
+.dispatch-footer {
+  display: flex;
+  gap: 25px;
+  padding-top: 10px;
+  color: #c5dac8;
+  font: 11px Arial, sans-serif;
+}
+.debrief { display: grid; grid-template-columns: 1fr 1fr; flex: 1; border: 1px solid #9ab5a7; background: #e8dec4; color: #193945; }
+.debrief-art { position: relative; display: grid; place-items: center; overflow: hidden; min-height: 400px; background: #244d58; }
+.medal-mark { z-index: 1; display: grid; place-items: center; width: 180px; height: 180px; border: 4px double #f6dca3; border-radius: 50%; background: #cf9b5f; box-shadow: 0 0 0 15px #e8c48233, 0 0 80px #f2d69355; }
+.medal-mark span { color: #fff0c5; font-size: 100px; }
+.debrief-rays { position: absolute; width: 700px; height: 700px; background: repeating-conic-gradient(from 0deg, #fff0c010 0deg 12deg, transparent 12deg 30deg); }
+.debrief-horizon { position: absolute; bottom: 10%; left: 5%; right: 5%; border-top: 2px solid #a9d0bd; text-align: center; }
+.debrief-horizon svg { width: 140px; margin-top: -20px; }
+.debrief-copy { padding: clamp(25px, 4vw, 65px); align-self: center; }
+.debrief-copy .dispatch-kicker { color: #996849; }
+.debrief-copy h2 { margin: 18px 0; font: normal clamp(40px, 5vw, 68px)/.95 Georgia, serif; letter-spacing: -.04em; }
+.debrief-medal { color: #a45f41; text-transform: uppercase; font: bold 12px Arial, sans-serif; letter-spacing: .15em; }
+.debrief-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 28px 0 20px; border-top: 1px solid #b9ad90; border-bottom: 1px solid #b9ad90; padding: 18px 0; }
+.debrief-stats strong { font: normal 32px Georgia, serif; }
+.debrief-stats small { font: 14px Arial, sans-serif; }
+.debrief-stats span { color: #536d68; margin-top: 5px; }
+.debrief-note { color: #4b6661; font: 13px/1.5 Arial, sans-serif; }
+.debrief-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.dispatch-primary { padding: 13px 17px; background: #1c4e52; border: 1px solid #1c4e52; color: #fff0d0; font: bold 11px Arial, sans-serif; text-transform: uppercase; }
+.debrief-buttons .dispatch-outline { padding: 12px; color: #1c4e52; border-color: #678479; }
+@media (min-width: 761px) {
+  .dispatch-layout { flex: none; height: calc(100dvh - 145px); max-height: 690px; }
+  .cover-copy { padding-top: 18px; padding-bottom: 18px; }
+  .cover h1 { margin: 14px 0; font-size: clamp(64px, 7vw, 105px); }
+  .cover .lead { margin: 10px 0; font-size: 16px; }
+}
+@media (max-width: 760px) {
+  .dispatch-shell { padding: 15px; }
+  .dispatch-header h1 { font-size: 25px; }
+  .dispatch-layout { display: flex; flex-direction: column; gap: 10px; }
+  .dispatch-map { aspect-ratio: 960 / 600; }
+  .dispatch-mobile-docks { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 8px; }
+  .dispatch-mobile-docks button { min-height: 50px; padding: 7px 9px; text-align: left; color: #fff0d2; background: #244a55; border: 1px solid #85aa9a; }
+  .dispatch-mobile-docks strong, .dispatch-mobile-docks span { display: block; font: bold 12px Arial, sans-serif; }
+  .dispatch-mobile-docks span { margin-top: 4px; color: #f2c18f; font-size: 11px; }
+  .dispatch-side { padding: 14px; gap: 11px; }
+  .dispatch-meter strong { font-size: 25px; }
+  .dispatch-brief { min-height: 0; }
+  .dispatch-footer { flex-wrap: wrap; gap: 10px; line-height: 1.4; }
+  .port-name { font-size: 16px; }
+  .port-detail { font-size: 14px; }
+  .debrief { display: flex; flex-direction: column; }
+  .debrief-art { min-height: 270px; }
+  .medal-mark { width: 130px; height: 130px; }
+  .medal-mark span { font-size: 75px; }
+  .debrief-copy { padding: 26px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dispatch-wake { animation: none; opacity: 0; }
+  .boarding { animation: none; opacity: 0; }
+}

@@ -150,6 +150,11 @@ export function cover(state) {
       <div class="eyebrow">Three crossings &amp; a bonus voyage</div>
       <h1>Tide<em>glass</em></h1>
       <p class="lead">The coast is going dark. Guide a little tender through the changing tide and carry lantern light home.</p>
+      <button class="dispatch-launch" data-action="dispatch-start">
+        <span>NEW · RESCUE MODE</span><strong>Stormwatch Dispatch →</strong>
+        <small>Save lives. Read the forecast. Bring everyone home.</small>
+      </button>
+      <div class="campaign-caption">THE LANTERN ATLAS · FOUR PUZZLES</div>
       <div class="chart-list" aria-label="Choose a chart">${progress}</div>
       <p class="bottom">Your best crossings are saved on this device. The sea moves only when you do.</p>
     </div>${coverArt()}

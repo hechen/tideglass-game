@@ -15,7 +15,10 @@ if (output === root || (!relativeOutput.startsWith('..') && !isAbsolute(relative
 mkdirSync(output, { recursive: true });
 rmSync(join(output, 'dossier.json'), { force: true });
 
-const required = ['index.html', 'style.css', 'charts.js', 'rules.js', 'render.js', 'game.js'];
+const required = [
+  'index.html', 'style.css', 'charts.js', 'rules.js', 'render.js', 'game.js',
+  'dispatch-rules.js', 'dispatch-render.js',
+];
 for (const name of required) {
   if (!existsSync(join(root, 'game', name))) throw new Error(`Missing game/${name}`);
 }

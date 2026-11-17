@@ -4,7 +4,9 @@
 [![rank](https://make.fun/badge/best-game-01/hechen/tideglass-game/rank.svg)](https://make.fun/bounty/best-game-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=best-game-01)
 [![reward](https://make.fun/badge/best-game-01/hechen/tideglass-game/reward.svg)](https://make.fun/bounty/best-game-01?utm_source=github&utm_medium=readme&utm_campaign=best-game-01)
 
-Pilot a lantern tender across four coastal charts. Each crossing advances the tide. Read the channels, collect the lights and reach harbor before your turns run out. A one-use Tide key unlocks a shorter crossing on the bonus chart.
+Lead a rescue cutter through three Stormwatch Dispatch shifts. Weather closes a channel for one turn. Choose which calls to answer before they expire, plan around a three-person capacity, and return survivors to Hearth Harbor.
+
+In the Lantern Atlas campaign, pilot a lantern tender across four coastal charts. Each crossing advances the tide. Read the channels, collect the lights and reach harbor before your turns run out. A one-use Tide key unlocks a shorter crossing on the bonus chart.
 
 ## Run it
 

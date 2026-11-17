@@ -1,10 +1,13 @@
 import { charts } from './charts.js';
 import { edgeStatus, newVoyage, takeTurn, undo } from './rules.js';
 import { cover, dialog, play, victory } from './render.js';
+import { dispatchScore, dispatchStatus, dispatchTurn, newShift, ports, shifts, undoDispatch } from './dispatch-rules.js';
+import { dispatchDebrief, dispatchPlay } from './dispatch-render.js';
 
 const app = document.querySelector('#app');
 const announcer = document.querySelector('#announcer');
 const storageKey = 'tideglass-best-v1';
+const dispatchStorageKey = 'tideglass-dispatch-best-v1';
 
 function loadBest() {
   try {
@@ -21,21 +24,71 @@ function loadBest() {
 const state = {
   screen: 'cover', level: 0, sound: false, best: loadBest(),
   voyage: null, travel: null, message: '', result: null,
+  shiftIndex: 0, dispatch: null, dispatchTravel: null, dispatchPickup: 0,
+  dispatchMessage: '', dispatchBest: loadDispatchBest(),
 };
+
+function loadDispatchBest() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(dispatchStorageKey));
+    if (Array.isArray(saved)) {
+      return shifts.map((_, i) => Number.isInteger(saved[i]) && saved[i] > 0 ? saved[i] : null);
+    }
+  } catch {
+    // A shift is still fully playable when storage is unavailable.
+  }
+  return shifts.map(() => null);
+}
 
 function render(focusNode = null) {
   app.innerHTML = state.screen === 'cover' ? cover(state)
-    : state.screen === 'victory' ? victory(state) : play(state);
+    : state.screen === 'victory' ? victory(state)
+    : state.screen === 'dispatch' ? dispatchPlay(state)
+    : state.screen === 'dispatch-debrief' ? dispatchDebrief(state) : play(state);
   if (announcer) announcer.textContent = state.screen === 'play' ? state.message
-    : state.screen === 'victory' ? 'All lights home. Your captain’s log is complete.' : '';
+    : state.screen === 'victory' ? 'All lights home. Your captain’s log is complete.'
+    : state.screen === 'dispatch' ? state.dispatchMessage
+    : state.screen === 'dispatch-debrief' ? 'Shift complete. Your rescue report is ready.' : '';
   if (state.result) {
     app.insertAdjacentHTML('beforeend', dialog(...state.result));
     app.querySelector('.modal .primary')?.focus();
   } else if (state.screen === 'victory') {
     app.querySelector('.victory-copy h1')?.focus();
+  } else if (state.screen === 'dispatch-debrief') {
+    app.querySelector('.debrief-copy h2')?.focus();
   } else if (focusNode != null) {
-    app.querySelector(`[data-node="${focusNode}"]`)?.focus();
+    const selector = state.screen === 'dispatch' ? 'data-dispatch-node' : 'data-node';
+    app.querySelector(`[${selector}="${focusNode}"]`)?.focus();
   }
+}
+
+function startDispatch(index) {
+  state.shiftIndex = index;
+  state.dispatch = newShift(shifts[index]);
+  state.dispatchTravel = null;
+  state.dispatchPickup = 0;
+  state.dispatchMessage = shifts[index].briefing;
+  state.screen = 'dispatch';
+  state.result = null;
+  render();
+}
+
+function sailDispatch(destination, keyboard = false) {
+  if (state.screen !== 'dispatch') return;
+  const previous = state.dispatch.pos;
+  const result = dispatchTurn(shifts[state.shiftIndex], state.dispatch, destination);
+  state.dispatch = result.state;
+  state.dispatchMessage = result.message;
+  state.dispatchTravel = result.allowed && destination !== null ? previous : null;
+  state.dispatchPickup = result.pickup ?? 0;
+  if (result.allowed) tone();
+  if (result.finished) {
+    const score = dispatchScore(shifts[state.shiftIndex], state.dispatch).score;
+    state.dispatchBest[state.shiftIndex] = Math.max(state.dispatchBest[state.shiftIndex] ?? 0, score);
+    try { localStorage.setItem(dispatchStorageKey, JSON.stringify(state.dispatchBest)); } catch { /* In-memory best remains. */ }
+    state.screen = 'dispatch-debrief';
+  }
+  render(keyboard ? (destination ?? previous) : null);
 }
 
 function start(level) {
@@ -102,6 +155,23 @@ function advance(destination, keyboard = false) {
 
 function action(name) {
   switch (name) {
+    case 'dispatch-start': startDispatch(0); break;
+    case 'dispatch-retry': startDispatch(state.shiftIndex); break;
+    case 'dispatch-next': startDispatch((state.shiftIndex + 1) % shifts.length); break;
+    case 'dispatch-atlas': state.screen = 'cover'; render(); break;
+    case 'dispatch-wait':
+      sailDispatch(null);
+      if (state.screen === 'dispatch') app.querySelector('[data-action="dispatch-wait"]')?.focus();
+      break;
+    case 'dispatch-undo':
+      state.dispatch = undoDispatch(state.dispatch);
+      state.dispatchTravel = null;
+      state.dispatchPickup = 0;
+      state.dispatchMessage = 'Last turn undone; forecast and calls restored.';
+      state.screen = 'dispatch';
+      render();
+      app.querySelector('[data-action="dispatch-undo"]')?.focus();
+      break;
     case 'sound':
       state.sound = !state.sound;
       render();
@@ -140,11 +210,23 @@ app.addEventListener('click', event => {
   if (button) return action(button.dataset.action);
   const chart = event.target.closest('[data-level]');
   if (chart && !chart.disabled) return start(Number(chart.dataset.level));
+  const dock = event.target.closest('[data-dispatch-node]');
+  if (dock) return sailDispatch(Number(dock.dataset.dispatchNode));
   const node = event.target.closest('[data-node]');
   if (node) advance(Number(node.dataset.node));
 });
 
 function preview(event) {
+  const dock = event.target.closest?.('[data-dispatch-node]');
+  if (dock && state.screen === 'dispatch') {
+    const destination = Number(dock.dataset.dispatchNode);
+    const status = dispatchStatus(shifts[state.shiftIndex], state.dispatch, destination);
+    const message = status.allowed ? `Sail to ${ports[destination].name}: 1 turn.` : status.message;
+    const hint = app.querySelector('.dispatch-brief');
+    if (hint) hint.textContent = message;
+    if (announcer && event.type === 'focusin') announcer.textContent = message;
+    return;
+  }
   const node = event.target.closest?.('[data-node]');
   if (!node || state.screen !== 'play' || state.result) return;
   const destination = Number(node.dataset.node);
@@ -161,6 +243,10 @@ function preview(event) {
 app.addEventListener('pointerover', preview);
 app.addEventListener('focusin', preview);
 app.addEventListener('pointerout', event => {
+  if (event.target.closest?.('[data-dispatch-node]')) {
+    const hint = app.querySelector('.dispatch-brief');
+    if (hint) hint.textContent = state.dispatchMessage;
+  }
   if (event.target.closest?.('[data-node]')) {
     const hint = app.querySelector('.hint');
     if (hint) hint.textContent = state.message;
@@ -179,6 +265,17 @@ document.addEventListener('keydown', event => {
       event.preventDefault();
       first.focus();
     }
+    return;
+  }
+  const dock = event.target.closest?.('[data-dispatch-node]');
+  if (dock && (event.key === 'Enter' || event.key === ' ')) {
+    event.preventDefault();
+    sailDispatch(Number(dock.dataset.dispatchNode), true);
+    return;
+  }
+  if (state.screen === 'dispatch') {
+    if (event.key.toLowerCase() === 'w') { event.preventDefault(); action('dispatch-wait'); }
+    if (event.key.toLowerCase() === 'z') { event.preventDefault(); action('dispatch-undo'); }
     return;
   }
   const node = event.target.closest?.('[data-node]');
