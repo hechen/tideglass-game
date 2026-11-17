@@ -3,6 +3,7 @@ import { edgeStatus, newVoyage, takeTurn, undo } from './rules.js';
 import { cover, dialog, play, victory } from './render.js';
 import { dispatchScore, dispatchStatus, dispatchTurn, newShift, ports, shifts, undoDispatch } from './dispatch-rules.js';
 import { dispatchDebrief, dispatchPlay } from './dispatch-render.js';
+import { mountNightTow } from './night-tow.js';
 
 const app = document.querySelector('#app');
 const announcer = document.querySelector('#announcer');
@@ -155,6 +156,11 @@ function advance(destination, keyboard = false) {
 
 function action(name) {
   switch (name) {
+    case 'night-tow':
+      state.screen = 'night-tow';
+      state.result = null;
+      mountNightTow(app, { onExit: () => { state.screen = 'cover'; render(); } });
+      break;
     case 'dispatch-start': startDispatch(0); break;
     case 'dispatch-retry': startDispatch(state.shiftIndex); break;
     case 'dispatch-next': startDispatch((state.shiftIndex + 1) % shifts.length); break;

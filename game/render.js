@@ -126,7 +126,7 @@ function shell(state, body, footer = false) {
   return `<div class="shell">
     <header class="top">
       <div class="brand"><b>✳</b> Tideglass <span>/</span> The lantern atlas</div>
-      <div class="top-note">A voyage in four charts</div>
+      <div class="top-note">Live rescue &amp; charted voyages</div>
       <button class="sound" data-action="sound" aria-pressed="${state.sound}">
         Sound ${state.sound ? 'on' : 'off'}
       </button>
@@ -147,16 +147,17 @@ export function cover(state) {
   }).join('');
   return shell(state, `<section class="cover">
     <div class="cover-copy">
-      <div class="eyebrow">Three crossings &amp; a bonus voyage</div>
+      <div class="eyebrow">A world of light &amp; water</div>
       <h1>Tide<em>glass</em></h1>
-      <p class="lead">The coast is going dark. Guide a little tender through the changing tide and carry lantern light home.</p>
+      <p class="lead">The coast is going dark. Bring the lights home.</p>
+      <button class="night-launch" data-action="night-tow"><span>FEATURED · REAL-TIME RESCUE</span>
+        <strong>Night Tow →</strong><small>Find the flare. Throw a line. Bring them home.</small></button>
       <button class="dispatch-launch" data-action="dispatch-start">
-        <span>NEW · RESCUE MODE</span><strong>Stormwatch Dispatch →</strong>
-        <small>Save lives. Read the forecast. Bring everyone home.</small>
+        <span>TURN-BASED RESCUE</span><strong>Stormwatch Dispatch →</strong>
       </button>
       <div class="campaign-caption">THE LANTERN ATLAS · FOUR PUZZLES</div>
       <div class="chart-list" aria-label="Choose a chart">${progress}</div>
-      <p class="bottom">Your best crossings are saved on this device. The sea moves only when you do.</p>
+      <p class="bottom">Your best crossings are saved on this device. In the lantern charts, the sea moves only when you do.</p>
     </div>${coverArt()}
   </section>`, true);
 }

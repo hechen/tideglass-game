@@ -18,6 +18,7 @@ rmSync(join(output, 'dossier.json'), { force: true });
 const required = [
   'index.html', 'style.css', 'charts.js', 'rules.js', 'render.js', 'game.js',
   'dispatch-rules.js', 'dispatch-render.js',
+  'night-tow.js', 'night-tow-sim.js', 'night-tow-art.js', 'night-tow-landscape.js',
 ];
 for (const name of required) {
   if (!existsSync(join(root, 'game', name))) throw new Error(`Missing game/${name}`);
